@@ -64,10 +64,7 @@ class Main extends Sprite
 		emitter.update(deltaSeconds);
 		
 		Lib.current.graphics.clear();
-		Lib.current.graphics.beginFill(0x00FF00);
-		Lib.current.graphics.drawRect(0, 0, 500, 500);
-		Lib.current.graphics.endFill();
-		emitter.mTilesheet.drawTiles(Lib.current.graphics, emitter.getDrawTilesData(),false,Tilesheet.TILE_RGB);
+		emitter.mTilesheet.drawTiles(Lib.current.graphics, emitter.drawData,false,Tilesheet.TILE_RGB);
 	}
 	
 	private function onBarrageComplete(inBarrage:RunningBarrage):Void 

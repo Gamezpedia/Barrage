@@ -16,6 +16,7 @@ class MiniEmitter implements IBulletEmitter
    public var pos:Vector2D;
    private var testPlayerOrigin:Vector2D;
    var elapsedTime:Float;
+   public var drawData:Array<Float>;
    
    public function new()
    {
@@ -65,22 +66,15 @@ class MiniEmitter implements IBulletEmitter
 	 */
 	public function update(inDeltaSeconds:Float):Void
 	{
+		//AJD - dont keep creating new arrays each update
+		drawData = new Array<Float>();
+		
 		elapsedTime += inDeltaSeconds;
 		
-		var debugOnce = false;
 		var diffTime = 0.0;
 		
 		for (p in _mParticles)
 		{
-			/*
-			//This kinda works
-			p.pos.x += p.velocity.x;
-			p.pos.y += p.velocity.y;
-			p.velocity.x = Math.cos(p.angle*Math.PI/180*p.speed);
-			p.velocity.y = Math.sin(p.angle*Math.PI/180*p.speed);
-			*/
-			
-			
 			var xAngle = Math.cos(p.angle);
 			var yAngle = Math.sin(p.angle);
 			
@@ -88,58 +82,22 @@ class MiniEmitter implements IBulletEmitter
 			diffTime = elapsedTime-p.startTime;
 			
 			//x(t) =  1/2at^2 + v0t + x0
-			var accelX = p.acceleration * xAngle * diffTime * diffTime * 0.5;
-			var accelY = p.acceleration * yAngle * diffTime * diffTime * 0.5;
+			var accelX = p.acceleration * xAngle * diffTime * diffTime ;
+			var accelY = p.acceleration * yAngle * diffTime * diffTime ;
+			
 			p.velocity.x = p.speed * xAngle * diffTime;
 			p.velocity.y = p.speed * yAngle * diffTime;
 			
 			p.pos.x = accelX + p.velocity.x + p.x;
 			p.pos.y = accelY + p.velocity.y + p.y;
 			
-			/*
-			if (!debugOnce)
-			{
-				trace(p.toString());
-				debugOnce = true;
-			}
-			*/
-			/*
-			
-			var xAngle = Math.cos(p.angle * Math.PI / 180);
-			var yAngle = Math.sin(p.angle * Math.PI / 180);
-			
-			var xAccel = p.acceleration * inDeltaSeconds * inDeltaSeconds * xAngle * 0.5;
-			var yAccel = p.acceleration * inDeltaSeconds * inDeltaSeconds * yAngle * 0.5;
-			
-			var xVelocity = p.speed * inDeltaSeconds * xAngle;
-			var yVelocity = p.speed * inDeltaSeconds * yAngle;
-			
-			p.velocity.x = xVelocity;
-			p.velocity.y = yVelocity;
-			
-			p.pos.x += xVelocity + xAccel;
-			p.pos.y += yVelocity + yAccel;
-			
-			*/
-			
+			drawData.push(p.pos.x);
+			drawData.push(p.pos.y);
+			drawData.push(0);//only one tile ID
+			drawData.push(((p.color&0xFF0000)>>16)/0xFF);//r
+			drawData.push(((p.color&0x00FF00)>>8)/0xFF);//g
+			drawData.push((p.color&0x0000FF)/0xFF);//b
 		}
 			
-	}
-	public function getDrawTilesData():Array<Float>
-	{
-		var arr = new Array<Float>();
-		
-		for (p in _mParticles)
-		{
-			arr.push(p.pos.x);
-			arr.push(p.pos.y);
-			arr.push(0);//only one tile ID
-			arr.push(((p.color&0xFF0000)>>16)/0xFF);//r
-			arr.push(((p.color&0x00FF00)>>8)/0xFF);//g
-			arr.push((p.color&0x0000FF)/0xFF);//b
-			
-		}
-		
-		return arr;
 	}
 }
