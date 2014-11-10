@@ -82,14 +82,12 @@ class MiniEmitter implements IBulletEmitter
 			diffTime = elapsedTime-p.startTime;
 			
 			//x(t) =  1/2at^2 + v0t + x0
-			var velocityX = p.velocity.x + p.acceleration * xAngle * diffTime;
-			var velocityY = p.velocity.y + p.acceleration * yAngle * diffTime;
+			p.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
+			p.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
 			
-			p.pos.x += velocityX;
-			p.pos.y += velocityY;
-			
-			trace(p.toString());
-			
+			p.pos.x += p.velocity.x*inDeltaSeconds;
+			p.pos.y += p.velocity.y*inDeltaSeconds;
+		
 			drawData.push(p.pos.x);
 			drawData.push(p.pos.y);
 			drawData.push(0);//only one tile ID

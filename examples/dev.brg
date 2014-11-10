@@ -6,5 +6,5 @@ barrage called blah
 		fire mybullet from relative position [10,0] with absolute acceleration 100
 		do action
 			wait 0.1 seconds
-			fire mybullet from incremental position [10,0] with incremental acceleration -50
+			fire mybullet from incremental position [10,0] with incremental acceleration 25
 			repeat 30 times

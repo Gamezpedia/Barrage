@@ -1,11 +1,12 @@
 barrage called inchworm
 	bullet called wormsegment
 		speed is 100
+		acceleration is 0
 		do action
 			increment direction by 10 over 1 seconds
-			set speed to 0
+			set acceleration to -100
 			wait 0.5 seconds
-			set speed to 100
+			set acceleration to 100
 			wait 0.5 seconds
 			repeat 7 times
 

@@ -35,7 +35,7 @@ class Main extends Sprite
 		//Init
 		
 		//Create the barrage type
-		var str = Assets.getText("examples/inchworm.brg");
+		var str = Assets.getText("examples/waveburst.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
 		//Create emitter for graphic display
