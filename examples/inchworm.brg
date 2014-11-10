@@ -23,5 +23,3 @@ barrage called inchworm
 			myvalue is (repeatCount*6)
 		wait 1 seconds
 		repeat 4 times
-		wait 3 seconds
-		die
