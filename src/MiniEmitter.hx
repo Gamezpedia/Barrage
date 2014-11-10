@@ -5,6 +5,7 @@ import com.furusystems.barrage.instancing.IBullet;
 import com.furusystems.barrage.instancing.IBulletEmitter;
 import com.furusystems.flywheel.geom.Vector2D;
 import openfl.geom.Rectangle;
+import openfl.Lib;
 
 class MiniEmitter implements IBulletEmitter
 {
@@ -48,7 +49,7 @@ class MiniEmitter implements IBulletEmitter
 	
 	public function getAngleToPlayer(inPosition:Vector2D):Float
 	{
-		return inPosition.angleTo(testPlayerOrigin);
+		return inPosition.angleTo(new Vector2D(Lib.current.stage.mouseX,Lib.current.stage.mouseY));
 		//return testPlayerOrigin.angleTo(inPosition);
 	}
 	
