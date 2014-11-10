@@ -34,7 +34,6 @@ class MiniEmitter implements IBulletEmitter
    
    public function emit(inX:Float, inY:Float, inAngleRad:Float, inSpeed:Float, inAcceleration:Float, inDelta:Float):IBullet
    {
-	   trace("elapsed: " + elapsedTime);
 	   var p = new MiniParticle(inX, inY, inAngleRad,inSpeed,inAcceleration,elapsedTime);
 	   _mParticles.push(p);
 	   return p;
@@ -90,11 +89,11 @@ class MiniEmitter implements IBulletEmitter
 			//x(t) =  1/2at^2 + v0t + x0
 			var accelX = p.acceleration * xAngle * diffTime * diffTime * 0.5;
 			var accelY = p.acceleration * yAngle * diffTime * diffTime * 0.5;
-			var velocityX = p.speed * xAngle * diffTime;
-			var velocityY = p.speed * yAngle * diffTime;
+			p.velocity.x = p.speed * xAngle * diffTime;
+			p.velocity.y = p.speed * yAngle * diffTime;
 			
-			p.pos.x = accelX + velocityX + p.x;
-			p.pos.y = accelY + velocityY + p.y;
+			p.pos.x = accelX + p.velocity.x + p.x;
+			p.pos.y = accelY + p.velocity.y + p.y;
 			
 			if (!debugOnce)
 			{

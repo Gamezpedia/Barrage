@@ -34,7 +34,7 @@ class Main extends Sprite
 		//Init
 		
 		//Create the barrage type
-		var str = Assets.getText("examples/inchworm.brg");
+		var str = Assets.getText("examples/waveburst.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
 		//Create emitter for graphic display
@@ -71,7 +71,46 @@ class Main extends Sprite
 	
 	private function onBarrageComplete(inBarrage:RunningBarrage):Void 
 	{
-		trace("barrageComplete");
+		var str = Assets.getText("examples/inchworm.brg");
+		var b = com.furusystems.barrage.Barrage.fromString(str);
+		
+		//Create the barrage runner (logic to actually move the bullets)
+		runningBarrage = b.run(emitter);
+		runningBarrage.onComplete.add(onBarrageComplete2);
+		runningBarrage.start();
+	}
+	
+	private function onBarrageComplete2(inBarrage:RunningBarrage):Void 
+	{
+		var str = Assets.getText("examples/swarm.brg");
+		var b = com.furusystems.barrage.Barrage.fromString(str);
+		
+		//Create the barrage runner (logic to actually move the bullets)
+		runningBarrage = b.run(emitter);
+		runningBarrage.onComplete.add(onBarrageComplete3);
+		runningBarrage.start();
+	}
+	
+	private function onBarrageComplete3(inBarrage:RunningBarrage):Void 
+	{
+		var str = Assets.getText("examples/dev.brg");
+		var b = com.furusystems.barrage.Barrage.fromString(str);
+		
+		//Create the barrage runner (logic to actually move the bullets)
+		runningBarrage = b.run(emitter);
+		runningBarrage.onComplete.add(onBarrageComplete4);
+		runningBarrage.start();
+	}
+	
+	private function onBarrageComplete4(inBarrage:RunningBarrage):Void 
+	{
+		var str = Assets.getText("examples/waveburst.brg");
+		var b = com.furusystems.barrage.Barrage.fromString(str);
+		
+		//Create the barrage runner (logic to actually move the bullets)
+		runningBarrage = b.run(emitter);
+		runningBarrage.onComplete.add(onBarrageComplete);
+		runningBarrage.start();
 	}
 
 	/* SETUP */
