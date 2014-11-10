@@ -20,7 +20,7 @@ class MiniEmitter implements IBulletEmitter
    public function new()
    {
 	   //Create tilesheet
-	  mTilesheet = new Tilesheet(new BitmapData(20,20,false,0xFF0000));
+	  mTilesheet = new Tilesheet(new BitmapData(20,20,false,0xFFFFFF));
 	  var r = new Rectangle(0, 0, 4, 4);
 	  mTilesheet.addTileRect(r);
 	  
@@ -96,11 +96,13 @@ class MiniEmitter implements IBulletEmitter
 			p.pos.x = accelX + p.velocity.x + p.x;
 			p.pos.y = accelY + p.velocity.y + p.y;
 			
+			/*
 			if (!debugOnce)
 			{
 				trace(p.toString());
 				debugOnce = true;
 			}
+			*/
 			/*
 			
 			var xAngle = Math.cos(p.angle * Math.PI / 180);
@@ -132,6 +134,10 @@ class MiniEmitter implements IBulletEmitter
 			arr.push(p.pos.x);
 			arr.push(p.pos.y);
 			arr.push(0);//only one tile ID
+			arr.push(((p.color&0xFF0000)>>16)/0xFF);//r
+			arr.push(((p.color&0x00FF00)>>8)/0xFF);//g
+			arr.push((p.color&0x0000FF)/0xFF);//b
+			
 		}
 		
 		return arr;

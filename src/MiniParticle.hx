@@ -12,6 +12,7 @@ class MiniParticle implements IBullet
 	public var active:Bool;
 	public var id:Int;
 	public var startTime:Float;
+	public var color:Int;
 	
 	//x and y used for display...other values for calcs
 	public var x:Float;
@@ -36,6 +37,9 @@ class MiniParticle implements IBullet
 		startTime = inStartTime;
 		x = inX;
 		y = inY;
+		
+		//random color
+		color = Std.random(0xFFFFFF);
     }
 	
 	public function toString():String

@@ -5,6 +5,7 @@ import flash.events.Event;
 import flash.Lib;
 import com.furusystems.barrage.instancing.RunningBarrage;
 import openfl.Assets;
+import openfl.display.Tilesheet;
 
 /**
  * ...
@@ -66,7 +67,7 @@ class Main extends Sprite
 		Lib.current.graphics.beginFill(0x00FF00);
 		Lib.current.graphics.drawRect(0, 0, 500, 500);
 		Lib.current.graphics.endFill();
-		emitter.mTilesheet.drawTiles(Lib.current.graphics, emitter.getDrawTilesData());
+		emitter.mTilesheet.drawTiles(Lib.current.graphics, emitter.getDrawTilesData(),false,Tilesheet.TILE_RGB);
 	}
 	
 	private function onBarrageComplete(inBarrage:RunningBarrage):Void 
