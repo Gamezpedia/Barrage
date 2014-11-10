@@ -22,21 +22,21 @@ class MiniParticle implements IBullet
 	
     public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float,inStartTime:Float):Void
     {
-		id = MiniParticle.UniqueID++;
-		
-		//start velocity (vx0 and vy0)
-		velocity 	= new Vector2D(inSpeed * Math.cos(inAngle),
-								   inSpeed * Math.sin(inAngle));  
-		
-		//start pos (x0 and y0)
-		pos 		= new Vector2D(inX, inY);
-		
 		acceleration = inAccel;
+		speed = inSpeed;
 		angle = inAngle;
 		active = false;
+		id = MiniParticle.UniqueID++;
 		startTime = inStartTime;
 		x = inX;
 		y = inY;
+		
+		//start velocity (vx0 and vy0)
+		velocity 	= new Vector2D(speed * Math.cos(inAngle),
+								   speed * Math.sin(inAngle));  
+		
+		//start pos (x0 and y0)
+		pos 		= new Vector2D(inX, inY);
 		
 		//random color
 		color = Std.random(0xFFFFFF);
@@ -44,6 +44,6 @@ class MiniParticle implements IBullet
 	
 	public function toString():String
 	{
-		return "speed: " + speed + " angle: " + angle + " acceleration: " + acceleration + "x/y: " + x + " : " + y + " velocity: " + velocity.toString() + "position: " + pos.toString();
+		return "speed: " + speed + " angle: " + angle + " acceleration: " + acceleration + " x/y: " + x + " : " + y + " velocity: " + velocity.toString() + "position: " + pos.toString();
 	}
 }
