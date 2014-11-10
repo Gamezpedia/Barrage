@@ -11,6 +11,7 @@ class MiniParticle implements IBullet
 	public var angle:Float;
 	public var active:Bool;
 	public var id:Int;
+	public var startTime:Float;
 	
 	//x and y used for display...other values for calcs
 	public var x:Float;
@@ -18,7 +19,7 @@ class MiniParticle implements IBullet
 	
     public static var UniqueID:Int = 0;
 	
-    public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float,inDelta:Float):Void
+    public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float,inStartTime:Float):Void
     {
 		id = MiniParticle.UniqueID++;
 		
@@ -32,6 +33,7 @@ class MiniParticle implements IBullet
 		acceleration = inAccel;
 		angle = inAngle;
 		active = false;
+		startTime = inStartTime;
 		x = inX;
 		y = inY;
     }

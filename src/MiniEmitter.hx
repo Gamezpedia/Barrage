@@ -34,26 +34,23 @@ class MiniEmitter implements IBulletEmitter
    
    public function emit(inX:Float, inY:Float, inAngleRad:Float, inSpeed:Float, inAcceleration:Float, inDelta:Float):IBullet
    {
-	   var p = new MiniParticle(inX, inY, inAngleRad,inSpeed,inAcceleration,inDelta);
+	   trace("elapsed: " + elapsedTime);
+	   var p = new MiniParticle(inX, inY, inAngleRad,inSpeed,inAcceleration,elapsedTime);
 	   _mParticles.push(p);
 	   return p;
    }
 	
 	public function getAngleToEmitter(inPosition:Vector2D):Float
 	{
-		trace("pos1: " + inPosition.angleTo(pos));
-		trace("pos2: " + pos.angleTo(inPosition));
-		//return inPosition.angleTo(pos);
-		return pos.angleTo(inPosition);
+		return inPosition.angleTo(pos);
+		//return pos.angleTo(inPosition);
 		
 	}
 	
 	public function getAngleToPlayer(inPosition:Vector2D):Float
 	{
-		trace("pos1x: " + inPosition.angleTo(testPlayerOrigin));
-		trace("pos2x: " + testPlayerOrigin.angleTo(inPosition));
-		//return inPosition.angleTo(testPlayerOrigin);
-		return testPlayerOrigin.angleTo(inPosition);
+		return inPosition.angleTo(testPlayerOrigin);
+		//return testPlayerOrigin.angleTo(inPosition);
 	}
 	
 	public function kill(inBullet:IBullet):Void
@@ -83,24 +80,28 @@ class MiniEmitter implements IBulletEmitter
 			p.velocity.y = Math.sin(p.angle*Math.PI/180*p.speed);
 			*/
 			
-			/*
+			
+			var xAngle = Math.cos(p.angle * Math.PI / 180);
+			var yAngle = Math.sin(p.angle * Math.PI / 180);
+			
 			//total time the particle has been alive
-			diffTime = elapsedTime - p.startTime;
+			diffTime = elapsedTime-p.startTime;
 			
 			//x(t) =  1/2at^2 + v0t + x0
-			var accelX = p.acceleration * Math.cos(p.angle * Math.PI / 180) * diffTime * diffTime * 0.5;
-			var accelY = p.acceleration * Math.sin(p.angle * Math.PI / 180) * diffTime * diffTime * 0.5;
+			var accelX = p.acceleration * xAngle * diffTime * diffTime * 0.5;
+			var accelY = p.acceleration * yAngle * diffTime * diffTime * 0.5;
+			var velocityX = p.speed * xAngle * diffTime;
+			var velocityY = p.speed * yAngle * diffTime;
 			
-			p.x = accelX + p.velocity.x * diffTime + p.pos.x;
-			p.y = accelY + p.velocity.y * diffTime + p.pos.y;
-			
+			p.x = accelX + velocityX + p.pos.x;
+			p.y = accelY + velocityY + p.pos.y;
 			
 			if (!debugOnce)
 			{
 				trace(p.toString());
 				debugOnce = true;
 			}
-			*/
+			/*
 			
 			var xAngle = Math.cos(p.angle * Math.PI / 180);
 			var yAngle = Math.sin(p.angle * Math.PI / 180);
@@ -117,10 +118,9 @@ class MiniEmitter implements IBulletEmitter
 			p.pos.x += xVelocity + xAccel;
 			p.pos.y += yVelocity + yAccel;
 			
-			
+			*/
 			
 		}
-		trace("diffTime: " + diffTime);
 			
 	}
 	public function getDrawTilesData():Array<Float>
@@ -129,8 +129,8 @@ class MiniEmitter implements IBulletEmitter
 		
 		for (p in _mParticles)
 		{
-			arr.push(p.pos.x);
-			arr.push(p.pos.y);
+			arr.push(p.x);
+			arr.push(p.y);
 			arr.push(0);//only one tile ID
 		}
 		
