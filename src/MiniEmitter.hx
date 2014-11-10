@@ -28,7 +28,7 @@ class MiniEmitter implements IBulletEmitter
 	  
 	  //test data
 	  pos = new Vector2D(900,500);
-	  testPlayerOrigin = new Vector2D(0, 0);
+	  testPlayerOrigin = new Vector2D(900, 200);
 	  elapsedTime = 0;
    }
    
@@ -81,8 +81,8 @@ class MiniEmitter implements IBulletEmitter
 			*/
 			
 			
-			var xAngle = Math.cos(p.angle * Math.PI / 180);
-			var yAngle = Math.sin(p.angle * Math.PI / 180);
+			var xAngle = Math.cos(p.angle);
+			var yAngle = Math.sin(p.angle);
 			
 			//total time the particle has been alive
 			diffTime = elapsedTime-p.startTime;
@@ -93,8 +93,8 @@ class MiniEmitter implements IBulletEmitter
 			var velocityX = p.speed * xAngle * diffTime;
 			var velocityY = p.speed * yAngle * diffTime;
 			
-			p.x = accelX + velocityX + p.pos.x;
-			p.y = accelY + velocityY + p.pos.y;
+			p.pos.x = accelX + velocityX + p.x;
+			p.pos.y = accelY + velocityY + p.y;
 			
 			if (!debugOnce)
 			{
@@ -129,8 +129,8 @@ class MiniEmitter implements IBulletEmitter
 		
 		for (p in _mParticles)
 		{
-			arr.push(p.x);
-			arr.push(p.y);
+			arr.push(p.pos.x);
+			arr.push(p.pos.y);
 			arr.push(0);//only one tile ID
 		}
 		

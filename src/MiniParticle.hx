@@ -24,8 +24,8 @@ class MiniParticle implements IBullet
 		id = MiniParticle.UniqueID++;
 		
 		//start velocity (vx0 and vy0)
-		velocity 	= new Vector2D(inSpeed * Math.cos(inAngle*Math.PI/180),
-								   inSpeed * Math.sin(inAngle*Math.PI/180));  
+		velocity 	= new Vector2D(inSpeed * Math.cos(inAngle),
+								   inSpeed * Math.sin(inAngle));  
 		
 		//start pos (x0 and y0)
 		pos 		= new Vector2D(inX, inY);
