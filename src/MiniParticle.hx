@@ -1,6 +1,7 @@
 package ;
 import com.furusystems.barrage.instancing.IBullet;
 import com.furusystems.flywheel.geom.Vector2D;
+import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
 import nape.phys.Body;
 import nape.phys.BodyType;
@@ -55,6 +56,16 @@ class MiniParticle implements IBullet
 		var collisionShape = Polygon.rect(0.0, 0.0, 4.0, 4.0, true);
 		body.shapes.add(new Polygon(collisionShape, new Material(99999, .03, .1, .9, .001))); //bouncy bullets
 		body.allowRotation = false;
+		
+		//setup how the bullets interact with other objects
+		body.cbTypes.add(NapeConst.CbTypeBullet);
+		body.setShapeFilters(new InteractionFilter(NapeConst.COLLISION_GROUP_BULLET, NapeConst.COLLISION_MASK_BULLET));
+		
+		//init position and velocity for nape
+		body.position.x = pos.x;
+		body.position.y = pos.y;
+		body.velocity.x = velocity.x;
+		body.velocity.y = velocity.y;
 		
 		//add the bullet to they physics world
 		body.space = inSpace;

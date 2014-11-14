@@ -6,7 +6,7 @@
 	<!-- output -->
 	<app main="Main" file="Barrage" path="bin" />
 	
-	<window background="#000000" fps="60" />
+	<window background="#000000" fps="30" />
 	<window width="600" height="600" unless="mobile" />
 	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
 	
@@ -21,7 +21,7 @@
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />
 	<assets path="examples"   include="*" type="text" />
-	
+	<haxedef name="NAPE_RELEASE_BUILD" />
 	
 	<!-- optimize output
 	<haxeflag name="-dce full" /> -->

@@ -123,16 +123,16 @@ class MiniEmitter implements IBulletEmitter
 			var yAngle = Math.sin(p.angle);
 			
 			//x(t) =  1/2at^2 + v0t + x0
-			p.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
-			p.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
+			//p.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
+			//p.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
 			
-			p.pos.x += p.velocity.x*inDeltaSeconds;
-			p.pos.y += p.velocity.y*inDeltaSeconds;
-		
+			p.body.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
+			p.body.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
+	
 			//map bullet position into physics
-			p.body.position.x = p.pos.x;
-			p.body.position.y = p.pos.y;
-			
+			p.pos.x = p.body.position.x;
+			p.pos.y = p.body.position.y;
+		
 			drawData.push(p.pos.x);
 			drawData.push(p.pos.y);
 			drawData.push(0);//only one tile ID
