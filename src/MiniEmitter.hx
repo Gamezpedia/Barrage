@@ -9,54 +9,47 @@ import openfl.Lib;
 
 class MiniEmitter implements IBulletEmitter
 {
-   private var _mParticles : Array<MiniParticle>;
-   public var mTilesheet:Tilesheet;
+   private var _particles : Array<MiniParticle>;
+   public var tilesheet:Tilesheet;
    
    //test variables
    public var pos:Vector2D;
-   private var testPlayerOrigin:Vector2D;
-   var elapsedTime:Float;
    public var drawData:Array<Float>;
    
    public function new()
    {
 	   //Create tilesheet
-	  mTilesheet = new Tilesheet(new BitmapData(20,20,false,0xFFFFFF));
+	  tilesheet = new Tilesheet(new BitmapData(20,20,false,0xFFFFFF));
 	  var r = new Rectangle(0, 0, 4, 4);
-	  mTilesheet.addTileRect(r);
+	  tilesheet.addTileRect(r);
 	  
 	  //init data structure
-	  _mParticles = new Array<MiniParticle>();
+	  _particles = new Array<MiniParticle>();
 	  
 	  //test data
 	  pos = new Vector2D(300,300);
-	  testPlayerOrigin = new Vector2D(900, 200);
-	  elapsedTime = 0;
    }
    
    public function emit(inX:Float, inY:Float, inAngleRad:Float, inSpeed:Float, inAcceleration:Float, inDelta:Float):IBullet
    {
-	   var p = new MiniParticle(inX, inY, inAngleRad,inSpeed,inAcceleration,elapsedTime);
-	   _mParticles.push(p);
+	   var p = new MiniParticle(inX, inY, inAngleRad,inSpeed,inAcceleration);
+	   _particles.push(p);
 	   return p;
    }
 	
 	public function getAngleToEmitter(inPosition:Vector2D):Float
 	{
 		return inPosition.angleTo(pos);
-		//return pos.angleTo(inPosition);
-		
 	}
 	
 	public function getAngleToPlayer(inPosition:Vector2D):Float
 	{
 		return inPosition.angleTo(new Vector2D(Lib.current.stage.mouseX,Lib.current.stage.mouseY));
-		//return testPlayerOrigin.angleTo(inPosition);
 	}
 	
 	public function kill(inBullet:IBullet):Void
 	{
-		_mParticles.remove(cast inBullet);
+		_particles.remove(cast inBullet);
 		inBullet = null;
 	}
 	
@@ -69,17 +62,10 @@ class MiniEmitter implements IBulletEmitter
 		//AJD - dont keep creating new arrays each update
 		drawData = new Array<Float>();
 		
-		elapsedTime += inDeltaSeconds;
-		
-		var diffTime = 0.0;
-		
-		for (p in _mParticles)
+		for (p in _particles)
 		{
 			var xAngle = Math.cos(p.angle);
 			var yAngle = Math.sin(p.angle);
-			
-			//total time the particle has been alive
-			diffTime = elapsedTime-p.startTime;
 			
 			//x(t) =  1/2at^2 + v0t + x0
 			p.velocity.x += p.acceleration * xAngle * inDeltaSeconds;

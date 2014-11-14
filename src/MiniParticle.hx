@@ -14,22 +14,15 @@ class MiniParticle implements IBullet
 	public var startTime:Float;
 	public var color:Int;
 	
-	//x and y used for display...other values for calcs
-	public var x:Float;
-	public var y:Float;
+	public static var UniqueID:Int = 0;
 	
-    public static var UniqueID:Int = 0;
-	
-    public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float,inStartTime:Float):Void
+    public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float):Void
     {
 		acceleration = inAccel;
 		speed = inSpeed;
 		angle = inAngle;
 		active = false;
 		id = MiniParticle.UniqueID++;
-		startTime = inStartTime;
-		x = inX;
-		y = inY;
 		
 		//start velocity (vx0 and vy0)
 		velocity 	= new Vector2D(speed * Math.cos(inAngle),
@@ -44,6 +37,6 @@ class MiniParticle implements IBullet
 	
 	public function toString():String
 	{
-		return "speed: " + speed + " angle: " + angle + " acceleration: " + acceleration + " x/y: " + x + " : " + y + " velocity: " + velocity.toString() + "position: " + pos.toString();
+		return "speed: " + speed + " angle: " + angle + " acceleration: " + acceleration + " velocity: " + velocity.toString() + "position: " + pos.toString();
 	}
 }
