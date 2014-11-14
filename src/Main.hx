@@ -4,7 +4,13 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
 import com.furusystems.barrage.instancing.RunningBarrage;
+import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
+import nape.phys.Body;
+import nape.phys.BodyType;
+import nape.phys.Material;
+import nape.shape.Circle;
+import nape.shape.Polygon;
 import nape.space.Space;
 import nape.util.Debug;
 import nape.util.ShapeDebug;
@@ -52,6 +58,33 @@ class Main extends Sprite
 		
 		//Create the nape physics space
 		_space = new Space(Vec2.get(0.0, 0.0, true));
+		
+		//Create some random objects to hit
+		// Generate some random objects!
+        for (i in 0...20) 
+		{
+			var body = new Body(BodyType.STATIC);
+
+			// Add random one of either a Circle, Box or Pentagon.
+			if (Math.random() < 0.33) {
+				body.shapes.add(new Circle(20));
+			}
+			else if (Math.random() < 0.5) {
+				body.shapes.add(new Polygon(Polygon.box(40, 40)));
+			}
+			else {
+				body.shapes.add(new Polygon(Polygon.regular(20, 20, 5)));
+			}
+
+			// Set to random position on stage and add to Space.
+			body.position.setxy(Math.random() * 600, Math.random() * 600 * 0.5);
+			body.space = _space;
+			body.cbTypes.add(NapeConst.CbTypeStatic);
+			body.setShapeMaterials(Material.steel());
+			
+			//setup how the bullets interact with other objects
+			body.setShapeFilters(new InteractionFilter(NapeConst.COLLISION_GROUP_STATIC, NapeConst.COLLISION_MASK_STATIC));
+		}
 		
 		//Init Nape Debugging
 		_debug = new ShapeDebug(600, 600);
