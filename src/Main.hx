@@ -4,6 +4,10 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
 import com.furusystems.barrage.instancing.RunningBarrage;
+import nape.geom.Vec2;
+import nape.space.Space;
+import nape.util.Debug;
+import nape.util.ShapeDebug;
 import openfl.Assets;
 import openfl.display.Tilesheet;
 
@@ -15,8 +19,16 @@ import openfl.display.Tilesheet;
 class Main extends Sprite 
 {
 	var inited:Bool;
+	
+	//Particle System
 	var emitter:MiniEmitter;
+	
+	//Particle Govenor
 	var runningBarrage:RunningBarrage;
+	
+	//Nape
+	var _space:Space;
+	var _debug:Debug;
 
 	/* ENTRY POINT */
 	
@@ -38,8 +50,15 @@ class Main extends Sprite
 		var str = Assets.getText("examples/waveburst.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
+		//Create the nape physics space
+		_space = new Space(Vec2.get(0.0, 0.0, true));
+		
+		//Init Nape Debugging
+		_debug = new ShapeDebug(600, 600);
+		Lib.current.addChild(_debug.display);
+		
 		//Create emitter for graphic display
-		emitter = new MiniEmitter();
+		emitter = new MiniEmitter(_space);
 		
 		//Create the barrage runner (logic to actually move the bullets)
 		runningBarrage = b.run(emitter);
@@ -59,10 +78,23 @@ class Main extends Sprite
 	private function onEnterFrame(e:Event):Void 
 	{
 		//Update
-		var deltaSeconds = 1 / 60; //30fps
+		var deltaSeconds = 1 / 30; //30fps
+		
+		//Physics Update
+		_space.step(deltaSeconds);
+		
+		//Barrage Update
 		runningBarrage.update(deltaSeconds);
+		
+		//Particle System Update
 		emitter.update(deltaSeconds);
 		
+		//draw Nape physics debugging data
+		_debug.clear();
+		_debug.draw(_space);
+		_debug.flush();
+		
+		//draw particles
 		Lib.current.graphics.clear();
 		emitter.tilesheet.drawTiles(Lib.current.graphics, emitter.drawData,false,Tilesheet.TILE_RGB);
 	}

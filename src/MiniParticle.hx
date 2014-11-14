@@ -1,6 +1,12 @@
 package ;
 import com.furusystems.barrage.instancing.IBullet;
 import com.furusystems.flywheel.geom.Vector2D;
+import nape.geom.Vec2;
+import nape.phys.Body;
+import nape.phys.BodyType;
+import nape.phys.Material;
+import nape.shape.Polygon;
+import nape.space.Space;
 
 class MiniParticle implements IBullet
 {
@@ -21,7 +27,10 @@ class MiniParticle implements IBullet
 	//Unique Counter for each particle
 	public static var UniqueID:Int = 0;
 	
-    public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float):Void
+	//Nape
+	public var body:Body;
+	
+    public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float,inSpace:Space):Void
     {
 		acceleration = inAccel;
 		speed = inSpeed;
@@ -38,6 +47,25 @@ class MiniParticle implements IBullet
 		
 		//random color
 		color = Std.random(0xFFFFFF);
+		
+		//Init nape body
+		body = new Body(BodyType.DYNAMIC, new Vec2(pos.x, pos.y));
+		
+		//4px by 4px collision box for the bullet (matches graphics size)
+		var collisionShape = Polygon.rect(0.0, 0.0, 4.0, 4.0, true);
+		body.shapes.add(new Polygon(collisionShape, new Material(99999, .03, .1, .9, .001))); //bouncy bullets
+		body.allowRotation = false;
+		
+		//add the bullet to they physics world
+		body.space = inSpace;
+		
+		//type for callback filtering
+		//AJD todo
+		//body.cbTypes.add(PhysicsCollision.CbTypeBullet);
+		//body.group = PhysicsCollision.InteractionGroupBullets; //use a group with ignore=true so bullets never hit each other, faster than collision masks/filters
+		
+		//add this bullet to the dynamic userData object, so we can access it from the callbacks
+		//body.userData.controller = this;
     }
 	
 	/**

@@ -1,4 +1,5 @@
 package ;
+import nape.space.Space;
 import openfl.display.BitmapData;
 import openfl.display.Tilesheet;
 import com.furusystems.barrage.instancing.IBullet;
@@ -14,6 +15,9 @@ import openfl.Lib;
  */
 class MiniEmitter implements IBulletEmitter
 {
+   //Nape Physics Space Instance
+   private var _space:Space;
+   
    //All particles in the system
    private var _particles : Array<MiniParticle>;
    
@@ -26,8 +30,11 @@ class MiniEmitter implements IBulletEmitter
    //drawTiles() tile data for graphics
    public var drawData:Array<Float>;
    
-   public function new()
+   public function new(inSpace:Space)
    {
+	  //Store off physics space for nape
+	  _space = inSpace;
+	  
 	  //Create tilesheet - for graphics
 	  tilesheet = new Tilesheet(new BitmapData(20,20,false,0xFFFFFF));
 	  var r = new Rectangle(0, 0, 4, 4);
@@ -52,7 +59,7 @@ class MiniEmitter implements IBulletEmitter
 	 */
 	public function emit(inX:Float, inY:Float, inAngleRad:Float, inSpeed:Float, inAcceleration:Float, inDelta:Float):IBullet
 	{
-	   var p = new MiniParticle(inX, inY, inAngleRad,inSpeed,inAcceleration);
+	   var p = new MiniParticle(inX, inY, inAngleRad,inSpeed,inAcceleration,_space);
 	   _particles.push(p);
 	   return p;
 	}
@@ -83,7 +90,21 @@ class MiniEmitter implements IBulletEmitter
 	 */
 	public function kill(inBullet:IBullet):Void
 	{
-		_particles.remove(cast inBullet);
+		var particleIndex = _particles.indexOf(cast inBullet);
+		
+		if ( -1 == particleIndex)
+		{
+			throw("Trying to remove a particle index that doesn't exist....wtf");
+		}
+		
+		var p = _particles[particleIndex];
+		
+		//Clean up nape
+		p.body.space = null;
+		p.body = null;
+		
+		//remove from particle system
+		_particles.remove(p);
 		inBullet = null;
 	}
 	
@@ -108,6 +129,10 @@ class MiniEmitter implements IBulletEmitter
 			p.pos.x += p.velocity.x*inDeltaSeconds;
 			p.pos.y += p.velocity.y*inDeltaSeconds;
 		
+			//map bullet position into physics
+			p.body.position.x = p.pos.x;
+			p.body.position.y = p.pos.y;
+			
 			drawData.push(p.pos.x);
 			drawData.push(p.pos.y);
 			drawData.push(0);//only one tile ID
