@@ -29,7 +29,7 @@ class MiniEmitter implements IBulletEmitter
 	  _mParticles = new Array<MiniParticle>();
 	  
 	  //test data
-	  pos = new Vector2D(900,500);
+	  pos = new Vector2D(300,300);
 	  testPlayerOrigin = new Vector2D(900, 200);
 	  elapsedTime = 0;
    }
