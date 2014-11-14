@@ -105,7 +105,7 @@ class MiniEmitter implements IBulletEmitter
 		
 		//remove from particle system
 		_particles.remove(p);
-		inBullet = null;
+		p = null;
 	}
 	
 	/**
