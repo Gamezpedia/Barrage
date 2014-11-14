@@ -4,16 +4,21 @@ import com.furusystems.flywheel.geom.Vector2D;
 
 class MiniParticle implements IBullet
 {
+	//position of the particle - specified by IOrigin
+	public var pos:Vector2D;
+	
+	//IBullet related 
 	public var acceleration:Float;
 	public var velocity:Vector2D;
-	public var pos:Vector2D;
 	public var speed:Float;
 	public var angle:Float;
 	public var active:Bool;
 	public var id:Int;
-	public var startTime:Float;
+	
+	//Extras
 	public var color:Int;
 	
+	//Unique Counter for each particle
 	public static var UniqueID:Int = 0;
 	
     public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float):Void
@@ -35,6 +40,10 @@ class MiniParticle implements IBullet
 		color = Std.random(0xFFFFFF);
     }
 	
+	/**
+	 * Helper for debugging
+	 * @return Particle properties in string form
+	 */
 	public function toString():String
 	{
 		return "speed: " + speed + " angle: " + angle + " acceleration: " + acceleration + " velocity: " + velocity.toString() + "position: " + pos.toString();
