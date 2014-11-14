@@ -8,3 +8,4 @@ barrage called blah
 			wait 0.1 seconds
 			fire mybullet from incremental position [10,0] with incremental acceleration 25
 			repeat 30 times
+		wait 3 seconds

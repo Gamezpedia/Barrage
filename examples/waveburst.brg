@@ -32,7 +32,7 @@
 						repeat 10 times
 					repeat 6 times
 				# wait for the sub-action to complete..
-				wait (6*0.25) seconds
+				wait (6*0.25+3) seconds
 				# then die 
 				die
 	

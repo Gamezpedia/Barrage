@@ -53,6 +53,7 @@ class Main extends Sprite
 		//Init
 		
 		//Create the barrage type
+		trace("barrageStart");
 		var str = Assets.getText("examples/waveburst.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
@@ -134,6 +135,10 @@ class Main extends Sprite
 	
 	private function onBarrageComplete(inBarrage:RunningBarrage):Void 
 	{
+		//clear old emitter data
+		emitter.reset();
+		
+		trace("barrageComplete");
 		var str = Assets.getText("examples/inchworm.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
@@ -145,6 +150,10 @@ class Main extends Sprite
 	
 	private function onBarrageComplete2(inBarrage:RunningBarrage):Void 
 	{
+		//clear old emitter data
+		emitter.reset();
+	
+		trace("barrageComplete2");
 		var str = Assets.getText("examples/swarm.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
@@ -156,6 +165,10 @@ class Main extends Sprite
 	
 	private function onBarrageComplete3(inBarrage:RunningBarrage):Void 
 	{
+		//clear old emitter data
+		emitter.reset();
+		
+		trace("barrageComplete3");
 		var str = Assets.getText("examples/dev.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
@@ -167,8 +180,12 @@ class Main extends Sprite
 	
 	private function onBarrageComplete4(inBarrage:RunningBarrage):Void 
 	{
+		trace("barrageComplete4");
 		var str = Assets.getText("examples/waveburst.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
+		
+		//clear old emitter data
+		emitter.reset();
 		
 		//Create the barrage runner (logic to actually move the bullets)
 		runningBarrage = b.run(emitter);

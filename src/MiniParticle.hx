@@ -80,6 +80,16 @@ class MiniParticle implements IBullet
     }
 	
 	/**
+	 * Properly clean up / deconstruct
+	 */
+	public inline function destroy():Void
+	{
+		body.space = null;
+		body = null;
+		velocity = null;
+		pos = null;
+	}
+	/**
 	 * Helper for debugging
 	 * @return Particle properties in string form
 	 */

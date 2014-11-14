@@ -90,15 +90,18 @@ class MiniEmitter implements IBulletEmitter
 	 */
 	public function kill(inBullet:IBullet):Void
 	{
-		var particleIndex = _particles.indexOf(cast inBullet);
+		var p:MiniParticle = cast inBullet;
 		
-		if ( -1 == particleIndex)
-		{
-			throw("Trying to remove a particle index that doesn't exist....wtf");
-		}
+		//Clean up
+		p.destroy();
 		
-		var p = _particles[particleIndex];
-		
+		//remove from particle system
+		_particles.remove(p);
+		p = null;
+	}
+
+	inline function destroyParticle(p:MiniParticle):Void 
+	{
 		//Clean up nape
 		p.body.space = null;
 		p.body = null;
@@ -140,5 +143,22 @@ class MiniEmitter implements IBulletEmitter
 			drawData.push(((p.color&0x00FF00)>>8)/0xFF);//g
 			drawData.push((p.color&0x0000FF)/0xFF);//b
 		}	
+	}
+	
+	public function reset():Void
+	{
+		for (p in _particles)
+		{
+			p.destroy();
+			
+			//remove from particle system
+			p = null;
+		}
+		
+		_particles = null;
+		_particles = new Array<MiniParticle>();
+		
+		//reset particle ids
+		MiniParticle.UniqueID = 0;
 	}
 }
