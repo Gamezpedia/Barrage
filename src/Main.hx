@@ -61,7 +61,7 @@ class Main extends Sprite
 		
 		//Create some random objects to hit
 		// Generate some random objects!
-        for (i in 0...20) 
+        for (i in 0...6) 
 		{
 			var body = new Body(BodyType.STATIC);
 
@@ -77,7 +77,7 @@ class Main extends Sprite
 			}
 
 			// Set to random position on stage and add to Space.
-			body.position.setxy(Math.random() * 600, Math.random() * 600 * 0.5);
+			body.position.setxy(Std.random(600), Std.random(600));
 			body.space = _space;
 			body.cbTypes.add(NapeConst.CbTypeStatic);
 			body.setShapeMaterials(Material.steel());
