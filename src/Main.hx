@@ -62,7 +62,7 @@ class Main extends Sprite
 		
 		//Create some random objects to hit
 		// Generate some random objects!
-        for (i in 0...6) 
+        for (i in 0...10) 
 		{
 			var body = new Body(BodyType.STATIC);
 

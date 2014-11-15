@@ -17,10 +17,10 @@ class MiniParticle implements IBullet
 	//IBullet related 
 	public var acceleration:Float;
 	public var velocity:Vector2D;
-	public var speed:Float;
-	public var angle:Float;
+	@:isVar public var angle(get, set):Float;
 	public var active:Bool;
 	public var id:Int;
+	@:isVar public var speed(get, set):Float;
 	
 	//Extras
 	public var color:Int;
@@ -96,5 +96,33 @@ class MiniParticle implements IBullet
 	public function toString():String
 	{
 		return "speed: " + speed + " angle: " + angle + " acceleration: " + acceleration + " velocity: " + velocity.toString() + "position: " + pos.toString();
+	}
+	
+	function get_speed():Float 
+	{
+		return speed;
+	}
+	
+	function set_speed(value:Float):Float 
+	{
+		//reset velocity
+		velocity 	= new Vector2D(value * Math.cos(angle),
+								   value * Math.sin(angle));  
+								   
+		return speed = value;
+	}
+	
+	function get_angle():Float 
+	{
+		return angle;
+	}
+	
+	function set_angle(value:Float):Float 
+	{
+		//reset velocity
+		velocity 	= new Vector2D(speed * Math.cos(value),
+								   speed * Math.sin(value));  
+								   
+		return angle = value;
 	}
 }

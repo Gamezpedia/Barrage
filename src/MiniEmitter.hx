@@ -129,9 +129,15 @@ class MiniEmitter implements IBulletEmitter
 			//p.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
 			//p.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
 			
-			p.body.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
-			p.body.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
+			//p.body.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
+			//p.body.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
 	
+			p.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
+			p.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
+			p.body.velocity.x = p.velocity.x;
+			p.body.velocity.y = p.velocity.y;
+			
+			
 			//map bullet position into physics
 			p.pos.x = p.body.position.x;
 			p.pos.y = p.body.position.y;
