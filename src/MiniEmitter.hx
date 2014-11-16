@@ -30,6 +30,10 @@ class MiniEmitter implements IBulletEmitter
    //drawTiles() tile data for graphics
    public var drawData:Array<Float>;
    
+   /**
+    * Constructor
+    * @param	inSpace	- Needs a nape space so we can add bullets/particles to it
+    */
    public function new(inSpace:Space)
    {
 	  //Store off physics space for nape
@@ -99,17 +103,6 @@ class MiniEmitter implements IBulletEmitter
 		_particles.remove(p);
 		p = null;
 	}
-
-	inline function destroyParticle(p:MiniParticle):Void 
-	{
-		//Clean up nape
-		p.body.space = null;
-		p.body = null;
-		
-		//remove from particle system
-		_particles.remove(p);
-		p = null;
-	}
 	
 	/**
 	 * Periodic Updates to control the particles
@@ -125,34 +118,61 @@ class MiniEmitter implements IBulletEmitter
 			var xAngle = Math.cos(p.angle);
 			var yAngle = Math.sin(p.angle);
 			
-			//x(t) =  1/2at^2 + v0t + x0
-			//p.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
-			//p.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
+			var xAccelStep = p.acceleration * xAngle * inDeltaSeconds;
+			var yAccelStep = p.acceleration * yAngle * inDeltaSeconds;
 			
-			//p.body.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
-			//p.body.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
-	
-			p.velocity.x += p.acceleration * xAngle * inDeltaSeconds;
-			p.velocity.y += p.acceleration * yAngle * inDeltaSeconds;
+			//x(t) =  1/2at^2 + v0t + x0
+			#if TEST_NAPE_CONTROLS_VELOCITY
+			//Nape controls velocity
+			//Barrage applies acceleration
+			//pro - We can react to physics collisions
+			//con - We cannot change speed instantly in the barrage script (eg. inchworm)
+			p.body.velocity.x += xAccelStep;
+			p.body.velocity.y += yAccelStep;
+			
+			//Keep barrage velocity same as nape velocity
+			//AJD - I don't think this does anything and can be removed
 			p.body.velocity.x = p.velocity.x;
 			p.body.velocity.y = p.velocity.y;
 			
+			#else
+			//Barrage controls velocity
+			//Barrage applies acceleration
+			//pro - We can change speed instantly in the barrage script (eg. inchworm)
+			//con - Since barrage controls velocity bullets are not "aware" when they hit an object
+			//Not a big deal if the bullets will be destroyed on a collisison
+			p.velocity.x += xAccelStep;
+			p.velocity.y += yAccelStep;
 			
-			//map bullet position into physics
+			//nape velocity actually makes the bullet move, so it has to match barrage velocity
+			p.body.velocity.x = p.velocity.x;
+			p.body.velocity.y = p.velocity.y;
+			#end
+			
+			//Get barrage bullet position from physics (they need to match)
+			//Remember the physics simulation is what moves the particles, the barrage portion
+			//is internal data that needs to match the physics data
 			p.pos.x = p.body.position.x;
 			p.pos.y = p.body.position.y;
 		
+			//Draw it
 			drawData.push(p.pos.x);
 			drawData.push(p.pos.y);
 			drawData.push(0);//only one tile ID
-			drawData.push(((p.color&0xFF0000)>>16)/0xFF);//r
-			drawData.push(((p.color&0x00FF00)>>8)/0xFF);//g
-			drawData.push((p.color&0x0000FF)/0xFF);//b
+			drawData.push(((p.color&0xFF0000)>>16)/0xFF);	//r
+			drawData.push(((p.color&0x00FF00)>>8)/0xFF);	//g
+			drawData.push((p.color&0x0000FF)/0xFF);			//b
 		}	
 	}
 	
+	/**
+	 * This should be called whenever a new barrage pattern will be used
+	 * @Note - If this isn't called the number of particles will just keep growing
+	 *         until performance tanks.
+	 */
 	public function reset():Void
 	{
+		//Clean up particles
 		for (p in _particles)
 		{
 			p.destroy();
@@ -161,6 +181,7 @@ class MiniEmitter implements IBulletEmitter
 			p = null;
 		}
 		
+		//reset particles
 		_particles = null;
 		_particles = new Array<MiniParticle>();
 		

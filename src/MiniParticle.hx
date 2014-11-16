@@ -17,9 +17,15 @@ class MiniParticle implements IBullet
 	//IBullet related 
 	public var acceleration:Float;
 	public var velocity:Vector2D;
+	
+	//Change to set function so we can catch angle changes and set
+	//instant velocity
 	@:isVar public var angle(get, set):Float;
 	public var active:Bool;
 	public var id:Int;
+	
+	//Change to set function so we can catch angle changes and set
+	//instant velocity
 	@:isVar public var speed(get, set):Float;
 	
 	//Extras
@@ -33,6 +39,7 @@ class MiniParticle implements IBullet
 	
     public function new(inX:Float,inY:Float,inAngle:Float,inSpeed:Float,inAccel:Float,inSpace:Space):Void
     {
+		//store off params
 		acceleration = inAccel;
 		speed = inSpeed;
 		angle = inAngle;
@@ -111,8 +118,9 @@ class MiniParticle implements IBullet
 	
 	/**
 	 * Reset velocity when Barrage changes the velocity of the bullet
-	 * @param	value
-	 * @return
+	 * @Note - Needed to support instant velocity changes from Barrage scripts
+	 * @param	value	The new speed that will be broken into x/y parts
+	 * @return	the new speed value
 	 */
 	function set_speed(value:Float):Float 
 	{
@@ -128,6 +136,12 @@ class MiniParticle implements IBullet
 		return angle;
 	}
 	
+	/**
+	 * Reset velocity when Barrage changes the angle of the bullet
+	 * @Note - Needed to support instant velocity changes from Barrage scripts
+	 * @param	value	The new speed that will be broken into x/y parts
+	 * @return	the new speed value
+	 */
 	function set_angle(value:Float):Float 
 	{
 		//reset velocity
