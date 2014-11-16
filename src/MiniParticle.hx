@@ -49,8 +49,24 @@ class MiniParticle implements IBullet
 		//random color
 		color = Std.random(0xFFFFFF);
 		
-		//Init nape body
-		body = new Body(BodyType.DYNAMIC, new Vec2(pos.x, pos.y));
+		//Setup for nape use
+		initPhysicsBody(inX,inY,velocity.x,velocity.y,inSpace);
+    }
+	
+	/**
+	 * Just a method that takes care of setting up a physics body, starting pos and velocity
+	 * need to match the data that barrage uses (pos and velocity)
+	 * 
+	 * @param	inPosX			Starting particle x position
+	 * @param	inPosY			Starting particle y position
+	 * @param	inVelocityX		Starting velocity x direction
+	 * @param	inVelocityY		Starting velocity y direction
+	 * @param	inSpace			The Nape space to add this body to
+	 */
+	private function initPhysicsBody(inPosX:Float,inPosY:Float,inVelocityX:Float,inVelocityY:Float,inSpace:Space):Void
+	{
+		//Init nape body type and position
+		body = new Body(BodyType.DYNAMIC, new Vec2(inPosX, inPosY));
 		
 		//4px by 4px collision box for the bullet (matches graphics size)
 		var collisionShape = Polygon.rect(0.0, 0.0, 4.0, 4.0, true);
@@ -58,26 +74,16 @@ class MiniParticle implements IBullet
 		body.allowRotation = false;
 		
 		//setup how the bullets interact with other objects
-		body.cbTypes.add(NapeConst.CbTypeBullet);
+		body.cbTypes.add(NapeConst.CbTypeBullet);				
 		body.setShapeFilters(new InteractionFilter(NapeConst.COLLISION_GROUP_BULLET, NapeConst.COLLISION_MASK_BULLET));
 		
-		//init position and velocity for nape
-		body.position.x = pos.x;
-		body.position.y = pos.y;
+		//init velocity for nape
 		body.velocity.x = velocity.x;
 		body.velocity.y = velocity.y;
 		
 		//add the bullet to they physics world
 		body.space = inSpace;
-		
-		//type for callback filtering
-		//AJD todo
-		//body.cbTypes.add(PhysicsCollision.CbTypeBullet);
-		//body.group = PhysicsCollision.InteractionGroupBullets; //use a group with ignore=true so bullets never hit each other, faster than collision masks/filters
-		
-		//add this bullet to the dynamic userData object, so we can access it from the callbacks
-		//body.userData.controller = this;
-    }
+	}
 	
 	/**
 	 * Properly clean up / deconstruct
@@ -103,6 +109,11 @@ class MiniParticle implements IBullet
 		return speed;
 	}
 	
+	/**
+	 * Reset velocity when Barrage changes the velocity of the bullet
+	 * @param	value
+	 * @return
+	 */
 	function set_speed(value:Float):Float 
 	{
 		//reset velocity
