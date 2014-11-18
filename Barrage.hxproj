@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="application.xml" />
     <movie fps="30" />
-    <movie width="1800" />
-    <movie height="1000" />
+    <movie width="600" />
+    <movie height="600" />
     <movie version="3" />
     <movie minorVersion="0" />
     <movie platform="NME" />
@@ -20,18 +20,18 @@
     <class path="C:\HaxeToolkit\haxe\lib\lime\2,0,0-alpha,8" />
     <class path="C:\HaxeToolkit\haxe\lib\actuate\1,7,5" />
     <class path="C:\HaxeToolkit\haxe\lib\hscript\2,0,4" />
+    <class path="C:\HaxeToolkit\haxe\lib\nape\2,0,16" />
     <class path="src" />
-    <class path="C:\HaxeToolkit\haxe\lib\lime\2,0,0-alpha,8\legacy" />
-    <class path="bin\windows\cpp\haxe" />
+    <class path="bin\flash\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="openfl=2.1.5&#xA;lime=2.0.0-alpha.8&#xA;actuate=1.7.5&#xA;hscript=2.0.4&#xA;tools=2.0.0-alpha.8&#xA;lime-legacy&#xA;no-compilation&#xA;native&#xA;lime-native&#xA;openfl-native&#xA;windows&#xA;desktop" />
+    <option directives="openfl=2.1.5&#xA;lime=2.0.0-alpha.8&#xA;actuate=1.7.5&#xA;hscript=2.0.4&#xA;nape=2.0.16&#xA;tools=2.0.0-alpha.8&#xA;no-compilation&#xA;NAPE_RELEASE_BUILD&#xA;openfl-flash&#xA;web" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="True" />
-    <option additional="--remap flash:openfl&#xA;#--macro keep(&quot;Main&quot;)" />
+    <option additional="-swf-version 11.2" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
