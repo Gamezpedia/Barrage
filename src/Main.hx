@@ -60,32 +60,9 @@ class Main extends Sprite
 		//Create the nape physics space
 		_space = new Space(Vec2.get(0.0, 0.0, true));
 		
-		//Create some random objects to hit
-		// Generate some random objects!
-        for (i in 0...10) 
-		{
-			var body = new Body(BodyType.STATIC);
-
-			// Add random one of either a Circle, Box or Pentagon.
-			if (Math.random() < 0.33) {
-				body.shapes.add(new Circle(20));
-			}
-			else if (Math.random() < 0.5) {
-				body.shapes.add(new Polygon(Polygon.box(40, 40)));
-			}
-			else {
-				body.shapes.add(new Polygon(Polygon.regular(20, 20, 5)));
-			}
-
-			// Set to random position on stage and add to Space.
-			body.position.setxy(Std.random(600), Std.random(600));
-			body.space = _space;
-			body.cbTypes.add(NapeConst.CbTypeStatic);
-			body.setShapeMaterials(Material.steel());
-			
-			//setup how the bullets interact with other objects
-			body.setShapeFilters(new InteractionFilter(NapeConst.COLLISION_GROUP_STATIC, NapeConst.COLLISION_MASK_STATIC));
-		}
+		//To show physics interactions we generate some random shapes and
+		//place them in our "world"
+		createStaticPhysicsObjects();
 		
 		//Init Nape Debugging
 		_debug = new ShapeDebug(600, 600);
@@ -107,6 +84,39 @@ class Main extends Sprite
 		
 		// Assets:
 		// nme.Assets.getBitmapData("img/assetname.jpg");
+	}
+	
+	/**
+	 * Helper function to group the Nape Debug objects
+	 */
+	private function createStaticPhysicsObjects():Void
+	{
+		//Create some random objects to hit
+		// Generate some random objects!
+        for (i in 0...10) 
+		{
+			var body = new Body(BodyType.STATIC);
+
+			// Add a random Circle, Box or Pentagon.
+			if (Math.random() < 0.33) {
+				body.shapes.add(new Circle(20));
+			}
+			else if (Math.random() < 0.5) {
+				body.shapes.add(new Polygon(Polygon.box(40, 40)));
+			}
+			else {
+				body.shapes.add(new Polygon(Polygon.regular(20, 20, 5)));
+			}
+
+			// Set to random position on stage and add to Space.
+			body.position.setxy(Std.random(600), Std.random(600));
+			body.space = _space;
+			body.cbTypes.add(NapeConst.CbTypeStatic);
+			body.setShapeMaterials(Material.steel());
+			
+			//setup how the bullets interact with other objects
+			body.setShapeFilters(new InteractionFilter(NapeConst.COLLISION_GROUP_STATIC, NapeConst.COLLISION_MASK_STATIC));
+		}
 	}
 	
 	private function onEnterFrame(e:Event):Void 
