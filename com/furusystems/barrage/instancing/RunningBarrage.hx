@@ -5,10 +5,10 @@ import com.furusystems.barrage.data.properties.Property;
 import com.furusystems.barrage.instancing.animation.Animator;
 import com.furusystems.barrage.instancing.events.FireEvent;
 import com.furusystems.barrage.instancing.IOrigin;
-import com.furusystems.flywheel.geom.Vector2D;
 import fsignal.Signal1;
 import haxe.ds.GenericStack;
 import haxe.ds.Vector.Vector;
+import nape.geom.Vec2;
 
 /**
  * ...
@@ -31,7 +31,7 @@ class RunningBarrage
 	
 	public var speedScale:Float;
 	public var accelScale:Float;
-	static var basePositionVec = new Vector2D();
+	static var basePositionVec = new Vec2();
 	
 	var started:Bool;
 	var lastDelta:Float = 0;
@@ -141,9 +141,9 @@ class RunningBarrage
 		emitter = null;
 	}
 	
-	static var tempVec:Vector2D = new Vector2D();
+	static var tempVec:Vec2 = new Vec2();
 	
-	function applyProperty(origin:Vector2D, base:Float, prev:Float, prop:Property, runningBarrage:RunningBarrage, runningAction:RunningAction):Float {
+	function applyProperty(origin:Vec2, base:Float, prev:Float, prop:Property, runningBarrage:RunningBarrage, runningAction:RunningAction):Float {
 		var other = prop.get(runningBarrage, runningAction);
 		if (prop.modifier.has(INCREMENTAL)) {
 				return prev + other; 
@@ -188,7 +188,10 @@ class RunningBarrage
 		var lastPositionX = action.prevPositionX;
 		var lastPositionY = action.prevPositionY;
 		
-		basePosition.copyFrom(origin.pos);
+		//replace copyFrom() from flywheel
+		basePosition.x = origin.pos.x;
+		basePosition.y = origin.pos.y;
+		
 		if (event.def.position != null) {
 			var vec = event.def.position.getVector(this, action);
 			if (event.def.position.modifier.has(RELATIVE)) {

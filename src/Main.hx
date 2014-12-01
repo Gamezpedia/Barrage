@@ -53,7 +53,6 @@ class Main extends Sprite
 		//Init
 		
 		//Create the barrage type
-		trace("barrageStart");
 		var str = Assets.getText("examples/waveburst.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
@@ -109,7 +108,7 @@ class Main extends Sprite
 			}
 
 			// Set to random position on stage and add to Space.
-			body.position.setxy(Std.random(600), Std.random(600));
+			body.position.setxy(Std.random(600), 350+Std.random(250));
 			body.space = _space;
 			body.cbTypes.add(NapeConst.CbTypeStatic);
 			body.setShapeMaterials(Material.steel());
@@ -148,7 +147,6 @@ class Main extends Sprite
 		//clear old emitter data
 		emitter.reset();
 		
-		trace("barrageComplete");
 		var str = Assets.getText("examples/inchworm.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
@@ -163,7 +161,6 @@ class Main extends Sprite
 		//clear old emitter data
 		emitter.reset();
 	
-		trace("barrageComplete2");
 		var str = Assets.getText("examples/swarm.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
@@ -178,7 +175,6 @@ class Main extends Sprite
 		//clear old emitter data
 		emitter.reset();
 		
-		trace("barrageComplete3");
 		var str = Assets.getText("examples/dev.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		
@@ -190,7 +186,6 @@ class Main extends Sprite
 	
 	private function onBarrageComplete4(inBarrage:RunningBarrage):Void 
 	{
-		trace("barrageComplete4");
 		var str = Assets.getText("examples/waveburst.brg");
 		var b = com.furusystems.barrage.Barrage.fromString(str);
 		

@@ -1,5 +1,5 @@
 package com.furusystems.barrage.instancing;
-import com.furusystems.flywheel.geom.Vector2D;
+import nape.geom.Vec2;
 /**
  * ...
  * @author Andreas Rønning
@@ -7,7 +7,7 @@ import com.furusystems.flywheel.geom.Vector2D;
 interface IBullet extends IOrigin
 {
 	var acceleration:Float;
-	var velocity:Vector2D;
+	var velocity:Vec2;
 	var angle(get, set):Float;
 	var speed(get, set):Float;
 	var active:Bool;

@@ -1,5 +1,5 @@
 package com.furusystems.barrage.instancing;
-import com.furusystems.flywheel.geom.Vector2D;
+import nape.geom.Vec2;
 /**
  * ...
  * @author Andreas Rønning
@@ -7,7 +7,7 @@ import com.furusystems.flywheel.geom.Vector2D;
 interface IBulletEmitter extends IOrigin
 {
 	function emit(x:Float, y:Float, angleRad:Float, speed:Float, acceleration:Float, delta:Float):IBullet;
-	function getAngleToEmitter(pos:Vector2D):Float;
-	function getAngleToPlayer(pos:Vector2D):Float;
+	function getAngleToEmitter(pos:Vec2):Float;
+	function getAngleToPlayer(pos:Vec2):Float;
 	function kill(bullet:IBullet):Void;
 }

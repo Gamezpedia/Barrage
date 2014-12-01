@@ -1,5 +1,5 @@
 package com.furusystems.barrage.instancing;
-import com.furusystems.flywheel.geom.Vector2D;
+import nape.geom.Vec2;
 
 /**
  * ...
@@ -7,5 +7,5 @@ import com.furusystems.flywheel.geom.Vector2D;
  */
 interface IOrigin
 {
-	var pos:Vector2D;
+	var pos:Vec2;
 }

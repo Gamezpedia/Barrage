@@ -1,6 +1,5 @@
 package ;
 import com.furusystems.barrage.instancing.IBullet;
-import com.furusystems.flywheel.geom.Vector2D;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
 import nape.phys.Body;
@@ -12,11 +11,11 @@ import nape.space.Space;
 class MiniParticle implements IBullet
 {
 	//position of the particle - specified by IOrigin
-	public var pos:Vector2D;
+	public var pos:Vec2;
 	
 	//IBullet related 
 	public var acceleration:Float;
-	public var velocity:Vector2D;
+	public var velocity:Vec2;
 	
 	//Change to set function so we can catch angle changes and set
 	//instant velocity
@@ -41,25 +40,29 @@ class MiniParticle implements IBullet
     {
 		//store off params
 		acceleration = inAccel;
-		speed = inSpeed;
-		angle = inAngle;
 		active = false;
 		id = MiniParticle.UniqueID++;
-		
-		//start velocity (vx0 and vy0)
-		velocity 	= new Vector2D(speed * Math.cos(inAngle),
-								   speed * Math.sin(inAngle));  
-		
-		//start pos (x0 and y0)
-		pos 		= new Vector2D(inX, inY);
 		
 		//random color
 		color = Std.random(0xFFFFFF);
 		
 		//Setup for nape use
-		initPhysicsBody(inX,inY,velocity.x,velocity.y,inSpace);
+		initPhysicsBody(inX,inY,getVelX(inSpeed,inAngle),getVelY(inSpeed,inAngle),inSpace);
     }
 	
+	private inline function getVelX(inSpeed:Float, inAngle:Float):Float
+	{
+		return inSpeed * Math.cos(inAngle);
+	}
+	private inline function getVelY(inSpeed:Float, inAngle:Float):Float
+	{
+		return inSpeed * Math.sin(inAngle);
+	}
+	private inline function updateVel(inSpeed:Float, inAngle:Float):Void
+	{
+		body.velocity.x = getVelX(inSpeed, inAngle);
+		body.velocity.y = getVelY(inSpeed, inAngle);
+	}
 	/**
 	 * Just a method that takes care of setting up a physics body, starting pos and velocity
 	 * need to match the data that barrage uses (pos and velocity)
@@ -85,8 +88,11 @@ class MiniParticle implements IBullet
 		body.setShapeFilters(new InteractionFilter(NapeConst.COLLISION_GROUP_BULLET, NapeConst.COLLISION_MASK_BULLET));
 		
 		//init velocity for nape
-		body.velocity.x = velocity.x;
-		body.velocity.y = velocity.y;
+		body.velocity = Vec2.get(inVelocityX, inVelocityY);
+		
+		//init barrage vars
+		velocity = body.velocity;
+		pos = body.position;
 		
 		//add the bullet to they physics world
 		body.space = inSpace;
@@ -124,11 +130,10 @@ class MiniParticle implements IBullet
 	 */
 	function set_speed(value:Float):Float 
 	{
-		//reset velocity
-		velocity 	= new Vector2D(value * Math.cos(angle),
-								   value * Math.sin(angle));  
-								   
-		return speed = value;
+		//update velocity ...AJD does this also change nape velocity?
+		speed = value;
+		updateVel(value, angle);						   
+		return value;
 	}
 	
 	function get_angle():Float 
@@ -144,10 +149,9 @@ class MiniParticle implements IBullet
 	 */
 	function set_angle(value:Float):Float 
 	{
-		//reset velocity
-		velocity 	= new Vector2D(speed * Math.cos(value),
-								   speed * Math.sin(value));  
-								   
-		return angle = value;
+		//update angle
+		angle = value;
+		updateVel(speed, value);
+		return value;
 	}
 }

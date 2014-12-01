@@ -1,10 +1,10 @@
 package ;
+import nape.geom.Vec2;
 import nape.space.Space;
 import openfl.display.BitmapData;
 import openfl.display.Tilesheet;
 import com.furusystems.barrage.instancing.IBullet;
 import com.furusystems.barrage.instancing.IBulletEmitter;
-import com.furusystems.flywheel.geom.Vector2D;
 import openfl.geom.Rectangle;
 import openfl.Lib;
 
@@ -25,7 +25,7 @@ class MiniEmitter implements IBulletEmitter
    public var tilesheet:Tilesheet;
    
    //IOrigin - source point of the emitter
-   public var pos:Vector2D;
+   public var pos:Vec2;
    
    //drawTiles() tile data for graphics
    public var drawData:Array<Float>;
@@ -48,7 +48,7 @@ class MiniEmitter implements IBulletEmitter
 	  _particles = new Array<MiniParticle>();
 	  
 	  //test data - emitter position
-	  pos = new Vector2D(300,300);
+	  pos = new Vec2(300,300);
    }
    
     /**
@@ -73,9 +73,11 @@ class MiniEmitter implements IBulletEmitter
 	 * @param	inPosition 	a particles position
 	 * @return	angle in radians
 	 */
-	public function getAngleToEmitter(inPosition:Vector2D):Float
+	public function getAngleToEmitter(inPosition:Vec2):Float
 	{
-		return inPosition.angleTo(pos);
+		var dx:Float = pos.x-inPosition.x;
+		var dy:Float = pos.y-inPosition.y;
+		return Math.atan2(dy, dx);
 	}
 	
 	/**
@@ -83,9 +85,12 @@ class MiniEmitter implements IBulletEmitter
 	 * @param	inPosition 	a particles position
 	 * @return	angle in radians
 	 */
-	public function getAngleToPlayer(inPosition:Vector2D):Float
+	public function getAngleToPlayer(inPosition:Vec2):Float
 	{
-		return inPosition.angleTo(new Vector2D(Lib.current.stage.mouseX,Lib.current.stage.mouseY));
+		//same as angleTo() from Vector2d in flywheel
+		var dx:Float = Lib.current.stage.mouseX-inPosition.x;
+		var dy:Float = Lib.current.stage.mouseY-inPosition.y;
+		return Math.atan2(dy, dx);
 	}
 	
 	/**
@@ -121,39 +126,12 @@ class MiniEmitter implements IBulletEmitter
 			var xAccelStep = p.acceleration * xAngle * inDeltaSeconds;
 			var yAccelStep = p.acceleration * yAngle * inDeltaSeconds;
 			
-			//x(t) =  1/2at^2 + v0t + x0
-			#if TEST_NAPE_CONTROLS_VELOCITY
 			//Nape controls velocity
 			//Barrage applies acceleration
 			//pro - We can react to physics collisions
 			//con - We cannot change speed instantly in the barrage script (eg. inchworm)
 			p.body.velocity.x += xAccelStep;
 			p.body.velocity.y += yAccelStep;
-			
-			//Keep barrage velocity same as nape velocity
-			//AJD - I don't think this does anything and can be removed
-			p.body.velocity.x = p.velocity.x;
-			p.body.velocity.y = p.velocity.y;
-			
-			#else
-			//Barrage controls velocity
-			//Barrage applies acceleration
-			//pro - We can change speed instantly in the barrage script (eg. inchworm)
-			//con - Since barrage controls velocity bullets are not "aware" when they hit an object
-			//Not a big deal if the bullets will be destroyed on a collisison
-			p.velocity.x += xAccelStep;
-			p.velocity.y += yAccelStep;
-			
-			//nape velocity actually makes the bullet move, so it has to match barrage velocity
-			p.body.velocity.x = p.velocity.x;
-			p.body.velocity.y = p.velocity.y;
-			#end
-			
-			//Get barrage bullet position from physics (they need to match)
-			//Remember the physics simulation is what moves the particles, the barrage portion
-			//is internal data that needs to match the physics data
-			p.pos.x = p.body.position.x;
-			p.pos.y = p.body.position.y;
 		
 			//Draw it
 			drawData.push(p.pos.x);
