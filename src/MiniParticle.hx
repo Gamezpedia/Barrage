@@ -15,7 +15,6 @@ class MiniParticle implements IBullet
 	
 	//IBullet related 
 	public var acceleration:Float;
-	public var velocity:Vec2;
 	
 	//Change to set function so we can catch angle changes and set
 	//instant velocity
@@ -91,7 +90,6 @@ class MiniParticle implements IBullet
 		body.velocity = Vec2.get(inVelocityX, inVelocityY);
 		
 		//init barrage vars
-		velocity = body.velocity;
 		pos = body.position;
 		
 		//add the bullet to they physics world
@@ -104,8 +102,9 @@ class MiniParticle implements IBullet
 	public inline function destroy():Void
 	{
 		body.space = null;
+		body.velocity.dispose();
+		body.position.dispose();
 		body = null;
-		velocity = null;
 		pos = null;
 	}
 	/**
@@ -114,7 +113,7 @@ class MiniParticle implements IBullet
 	 */
 	public function toString():String
 	{
-		return "speed: " + speed + " angle: " + angle + " acceleration: " + acceleration + " velocity: " + velocity.toString() + "position: " + pos.toString();
+		return "speed: " + speed + " angle: " + angle + " acceleration: " + acceleration + " velocity: " + body.velocity.toString() + "position: " + pos.toString();
 	}
 	
 	function get_speed():Float 
