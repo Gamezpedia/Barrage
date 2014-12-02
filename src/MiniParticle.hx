@@ -54,19 +54,6 @@ class MiniParticle implements IBullet
 		collision = false;
     }
 	
-	private inline function getVelX(inSpeed:Float, inAngle:Float):Float
-	{
-		return inSpeed * Math.cos(inAngle);
-	}
-	private inline function getVelY(inSpeed:Float, inAngle:Float):Float
-	{
-		return inSpeed * Math.sin(inAngle);
-	}
-	private inline function updateVel(inSpeed:Float, inAngle:Float):Void
-	{
-		body.velocity.x = getVelX(inSpeed, inAngle);
-		body.velocity.y = getVelY(inSpeed, inAngle);
-	}
 	/**
 	 * Just a method that takes care of setting up a physics body, starting pos and velocity
 	 * need to match the data that barrage uses (pos and velocity)
@@ -138,8 +125,38 @@ class MiniParticle implements IBullet
 	}
 	
 	/**
+	 * Calculate x-component of velocity
+	 * @param	inSpeed - current particle speed 
+	 * @param	inAngle - current particle angle
+	 * @return  x-component of current particle velocity
+	 */
+	private inline function getVelX(inSpeed:Float, inAngle:Float):Float
+	{
+		return inSpeed * Math.cos(inAngle);
+	}
+	/**
+	 * Calculate y-component of velocity
+	 * @param	inSpeed - current particle speed 
+	 * @param	inAngle - current particle angle
+	 * @return  y-component of current particle velocity
+	 */
+	private inline function getVelY(inSpeed:Float, inAngle:Float):Float
+	{
+		return inSpeed * Math.sin(inAngle);
+	}
+	/**
+	 * Calculate x-component and y-component of velocity and update nape body
+	 * @param	inSpeed - current particle speed 
+	 * @param	inAngle - current particle angle
+	 */
+	private inline function updateVel(inSpeed:Float, inAngle:Float):Void
+	{
+		body.velocity.x = getVelX(inSpeed, inAngle);
+		body.velocity.y = getVelY(inSpeed, inAngle);
+	}
+	
+	/**
 	 * Reset velocity when Barrage changes the velocity of the bullet
-	 * @Note - Needed to support instant velocity changes from Barrage scripts
 	 * @param	value	The new speed that will be broken into x/y parts
 	 * @return	the new speed value
 	 */

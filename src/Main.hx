@@ -82,7 +82,7 @@ class Main extends Sprite
 
 		Lib.current.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		
-		//add listeners for bullet->wall/object
+		//add listener for bullet->wall/object
 		_space.listeners.add(new InteractionListener(
             CbEvent.BEGIN,
             InteractionType.COLLISION,
@@ -90,11 +90,7 @@ class Main extends Sprite
             NapeConst.CbTypeStatic,
             onBulletHitStatic
         ));
-		// Stage:
-		// stage.stageWidth x stage.stageHeight @ stage.dpiScale
 		
-		// Assets:
-		// nme.Assets.getBitmapData("img/assetname.jpg");
 	}
 	
 	/**
