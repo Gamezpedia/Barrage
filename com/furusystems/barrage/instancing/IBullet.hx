@@ -11,4 +11,5 @@ interface IBullet extends IOrigin
 	var speed(get, set):Float;
 	var active:Bool;
 	var id:Int;
+	var collision:Bool; // hit something in nape?
 }

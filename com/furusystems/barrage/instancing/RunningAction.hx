@@ -68,7 +68,8 @@ class RunningAction
 	}
 	
 	public function update(runningBarrage:RunningBarrage, delta:Float) {
-		if (events.length == 0) {
+		//Kill off the bullet when it hits something
+		if (events.length == 0 || (this.triggeringBullet != null && this.triggeringBullet.collision)) {
 			runningBarrage.stopAction(this);
 		}else{
 			actionTime += delta;

@@ -10,6 +10,9 @@ import nape.space.Space;
 
 class MiniParticle implements IBullet
 {
+	//collision occurred?  Use this for nape to signify a bullet hit something and was removed
+	public var collision:Bool;
+	
 	//position of the particle - specified by IOrigin
 	public var pos:Vec2;
 	
@@ -46,7 +49,9 @@ class MiniParticle implements IBullet
 		color = Std.random(0xFFFFFF);
 		
 		//Setup for nape use
-		initPhysicsBody(inX,inY,getVelX(inSpeed,inAngle),getVelY(inSpeed,inAngle),inSpace);
+		initPhysicsBody(inX, inY, getVelX(inSpeed, inAngle), getVelY(inSpeed, inAngle), inSpace);
+		
+		collision = false;
     }
 	
 	private inline function getVelX(inSpeed:Float, inAngle:Float):Float
@@ -94,6 +99,13 @@ class MiniParticle implements IBullet
 		
 		//add the bullet to they physics world
 		body.space = inSpace;
+		
+		//Tell nape this is a bullet
+		body.cbTypes.add(NapeConst.CbTypeBullet);
+		
+		//special data dynamically added to the nape body to allow us to lookup this bullet
+		//after a nape collision occurs
+		body.userData.bullet = this;
 	}
 	
 	/**
@@ -101,11 +113,15 @@ class MiniParticle implements IBullet
 	 */
 	public inline function destroy():Void
 	{
-		body.space = null;
-		body.velocity.dispose();
-		body.position.dispose();
-		body = null;
-		pos = null;
+		if (!collision)
+		{
+			collision = true;
+			body.space = null;
+			body.velocity.dispose();
+			body.position.dispose();
+			body = null;
+			//pos = null;
+		}
 	}
 	/**
 	 * Helper for debugging
@@ -131,7 +147,10 @@ class MiniParticle implements IBullet
 	{
 		//update velocity ...AJD does this also change nape velocity?
 		speed = value;
-		updateVel(value, angle);						   
+		
+		if (!collision)
+			updateVel(value, angle);						   
+		
 		return value;
 	}
 	
@@ -150,7 +169,10 @@ class MiniParticle implements IBullet
 	{
 		//update angle
 		angle = value;
-		updateVel(speed, value);
+		
+		if (!collision)
+			updateVel(speed, value);
+		
 		return value;
 	}
 }

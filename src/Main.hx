@@ -1,9 +1,14 @@
 package ;
 
+import com.furusystems.barrage.instancing.IBullet;
+import com.furusystems.barrage.instancing.RunningBarrage;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
-import com.furusystems.barrage.instancing.RunningBarrage;
+import nape.callbacks.CbEvent;
+import nape.callbacks.InteractionCallback;
+import nape.callbacks.InteractionListener;
+import nape.callbacks.InteractionType;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
 import nape.phys.Body;
@@ -77,12 +82,33 @@ class Main extends Sprite
 
 		Lib.current.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		
-		
+		//add listeners for bullet->wall/object
+		_space.listeners.add(new InteractionListener(
+            CbEvent.BEGIN,
+            InteractionType.COLLISION,
+            NapeConst.CbTypeBullet,
+            NapeConst.CbTypeStatic,
+            onBulletHitStatic
+        ));
 		// Stage:
 		// stage.stageWidth x stage.stageHeight @ stage.dpiScale
 		
 		// Assets:
 		// nme.Assets.getBitmapData("img/assetname.jpg");
+	}
+	
+	/**
+	 * What happens when a bullet hits an object
+	 * @param	cb - the interaction callback object...holds collision information
+	 */
+	private function onBulletHitStatic(cb:InteractionCallback):Void 
+	{
+		// Bullet is first body since the parameter is first when creating
+		// the interaction listener
+        var bullet:IBullet = cb.int1.castBody.userData.bullet;
+       
+		//kill off the bullet since it hit something
+		emitter.kill(bullet);
 	}
 	
 	/**
@@ -113,6 +139,9 @@ class Main extends Sprite
 			body.cbTypes.add(NapeConst.CbTypeStatic);
 			body.setShapeMaterials(Material.steel());
 			
+			//Tell nape this is a static object
+			body.cbTypes.add(NapeConst.CbTypeStatic);
+			
 			//setup how the bullets interact with other objects
 			body.setShapeFilters(new InteractionFilter(NapeConst.COLLISION_GROUP_STATIC, NapeConst.COLLISION_MASK_STATIC));
 		}
@@ -121,7 +150,7 @@ class Main extends Sprite
 	private function onEnterFrame(e:Event):Void 
 	{
 		//Update
-		var deltaSeconds = 1 / 30; //30fps
+		var deltaSeconds = 1 / 60; //30fps
 		
 		//Physics Update
 		_space.step(deltaSeconds);
